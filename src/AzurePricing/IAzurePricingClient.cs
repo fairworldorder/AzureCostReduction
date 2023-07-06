@@ -5,8 +5,8 @@ namespace AzurePricing
 {
     public interface IAzurePricingClient
     {
-        Task<AzurePricingResponse> GetAppServicePlanPricing();
+        Task<AzurePricingResponse> GetAppServicePlanPricingAsync();
 
-        Task<AzurePricingResponse> GetServiceBusPricing();
+        Task<AzurePricingResponse> GetServiceBusPricingAsync();
     }
 }

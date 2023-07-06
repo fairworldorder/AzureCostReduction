@@ -1,13 +1,6 @@
 ﻿using Azure.ResourceManager.AppService;
 using Azure.ResourceManager.Resources;
 using AzurePricing;
-using CsvHelper;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Workshop.Models;
 
 namespace AzureCostReduction.Console.CostingModules
@@ -21,10 +14,10 @@ namespace AzureCostReduction.Console.CostingModules
             _pricingClient = pricingClient;
         }
 
-        public async Task<IEnumerable<EmptyAppServicePlan>> GetEmptyAppServicePlans(SubscriptionCollection subscriptions)
+        public async Task<IEnumerable<UnusedAzureResource>> GetEmptyAppServicePlans(SubscriptionCollection subscriptions)
         {
-            var appServicePricing = await _pricingClient.GetAppServicePlanPricing();
-            var emptyAppservicePlans = new List<EmptyAppServicePlan>();
+            var appServicePricing = await _pricingClient.GetAppServicePlanPricingAsync();
+            var emptyAppservicePlans = new List<UnusedAzureResource>();
 
             var tasks = new List<Task>();
 
@@ -36,7 +29,7 @@ namespace AzureCostReduction.Console.CostingModules
                     var empty = plans.Where(x => x.GetWebApps().ToArray().Length == 0).ToArray();
                     foreach (var p in empty)
                     {
-                        emptyAppservicePlans.Add(new EmptyAppServicePlan
+                        emptyAppservicePlans.Add(new UnusedAzureResource
                         {
                             Name = p.Data.Name,
                             Sku = p.Data.Sku.Name,

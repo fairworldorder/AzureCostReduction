@@ -17,7 +17,7 @@ namespace AzurePricing
             _client.BaseAddress = new Uri("https://azure.microsoft.com/api/v2/pricing/");
         }
 
-        public async Task<AzurePricingResponse> GetAppServicePlanPricing()
+        public async Task<AzurePricingResponse> GetAppServicePlanPricingAsync()
         {
             var today = DateTime.Today.ToString("yyyyMMdd");
             var route = $"app-service/calculator/?culture=en-au&discount=mca&billingAccount=&billingProfile=&v={today}";
@@ -28,7 +28,7 @@ namespace AzurePricing
             return azurePricingOffer;
         }
 
-        public async Task<AzurePricingResponse> GetServiceBusPricing()
+        public async Task<AzurePricingResponse> GetServiceBusPricingAsync()
         {
             var today = DateTime.Today.ToString("yyyyMMdd");
             var route = $"service-bus/calculator/?culture=en-au&discount=mca&billingAccount=&billingProfile=&v={today}";

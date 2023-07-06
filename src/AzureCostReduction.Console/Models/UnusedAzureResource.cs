@@ -1,6 +1,6 @@
 ﻿namespace Workshop.Models
 {
-    public class EmptyAppServicePlan
+    public class UnusedAzureResource
     {
         public string Name { get; set; }
 

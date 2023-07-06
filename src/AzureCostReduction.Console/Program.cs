@@ -1,8 +1,7 @@
 ﻿using Azure.Identity;
 using AzureCostReduction.Console.CostingModules;
+using AzureCostReduction.Console.Services;
 using AzurePricing;
-using CsvHelper;
-using System.Globalization;
 
 namespace Workshop
 {
@@ -10,6 +9,7 @@ namespace Workshop
     {
         private static async Task Main(string[] args)
         {
+            var csvWriter = new CsvWriterService();
             var azurePricingClient = new AzurePricingClient();
 
             var ibcredential = new InteractiveBrowserCredential();
@@ -26,10 +26,11 @@ namespace Workshop
 
             var appServiceModule = new AppServiceModule(azurePricingClient);
             var emptyAppservicePlans = (await appServiceModule.GetEmptyAppServicePlans(subscriptions)).ToList();
+            csvWriter.Write("appserviceplans.csv", emptyAppservicePlans);
 
-            using (var writer = new StreamWriter("C:\\Temp\\file.csv"))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                csv.WriteRecords(emptyAppservicePlans);
+            var emptyServiceBusModule = new ServiceBusModule(azurePricingClient);
+            var emptyServiceBusNamespaces = await emptyServiceBusModule.GetEmptyServiceBusNamespaces(subscriptions);
+            csvWriter.Write("servicebus.csv", emptyServiceBusNamespaces);
 
             Console.WriteLine("Completed");
         }
